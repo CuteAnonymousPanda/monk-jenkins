@@ -1,0 +1,53 @@
+log:
+  level: error
+  format: json
+
+accesslog: true
+
+providers:
+  file:
+    filename: /etc/traefik/traefik.yaml
+    watch: true
+  docker:
+    exposedbydefault: false
+
+entrypoints:
+  web:
+    address: ":{{ v "http-port" }}"
+  websecure:
+    address: ":{{ v "https-port" }}"
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: unsupported@unfortunateemail.com
+      storage: /etc/traefik/acme.json
+      httpChallenge:
+        entryPoint: web
+
+tls:
+  options:
+    mintls13:
+      minVersion: VersionTLS13
+
+    default:
+      minVersion: VersionTLS12
+      sniStrict: false
+      cipherSuites:
+        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+
+http:
+  middlewares:
+    open-access:
+      chain:
+        middlewares:
+          - redirect-to-https
+          - compress-traffic
+
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        port: {{ v "https-port" }}
+
+    compress-traffic:
+      compress: {}
