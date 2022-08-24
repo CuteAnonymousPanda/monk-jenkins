@@ -10,7 +10,7 @@ server:
     publisher: monk.io
     description: The leading open source automation server, Jenkins provides hundreds of plugins to support building, deploying and automating any project.
     source: https://github.com/jenkinsci/jenkins
-    version: 0.9
+    version: 1.0
 
   variables:
     hostname:
@@ -64,8 +64,7 @@ server:
         - '50000:50000'
       image-tag: lts
       image: jenkins/jenkins
-      # user: root should be removed when proper fix will be in monk code
-      user: root
+      user: jenkins
       labels:
         - <- `traefik.enable=${enable-traefik}`
 
