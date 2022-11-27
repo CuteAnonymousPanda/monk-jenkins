@@ -1,13 +1,14 @@
-Jenkins meet Monk
+Jenkins meets Monk
 ===
 
-This repository contains Monk.io template to deploy Jenkins system either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).  
+This repository contains Monk.io template to deploy Jenkins system either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).
 
-This template uses [Traefik](https://traefik.io/) as a reverse proxy to provide full HTTPS encryption.  
-Traefik will try to obtain full SSL certificate from Lets Encrypt(assuming valid hostname is provided in the `manifest.yaml`) and if not it will fallback to a default self generated SSL certificate.  
+This template uses [Traefik](https://traefik.io/) as a reverse proxy to provide full HTTPS encryption.
+Traefik will try to obtain full SSL certificate from Lets Encrypt(assuming valid hostname is provided in the `manifest.yaml`) and if not it will fallback to a default self generated SSL certificate.
 
-If you wish to disable Traefik(for example you have your own reverse proxy) please look at [Variables](#variables) section.  
+If you wish to disable Traefik(for example you have your own reverse proxy) please look at [Variables](#variables) section.
 
+- [Jenkins meets Monk](#jenkins-meets-monk)
   - [Prerequisites](#prerequisites)
     - [Make sure monkd is running.](#make-sure-monkd-is-running)
     - [Clone Repository](#clone-repository)
@@ -54,8 +55,8 @@ monk load manifest.yaml
 $ monk list -l jenkins
 
 ✔ Got the list
-Type      Template        Repository  Version  Tags  
-runnable  jenkins/server  local       -        -     
+Type      Template        Repository  Version  Tags
+runnable  jenkins/server  local       -        -
 ```
 
 ## Deploy Stack
@@ -75,15 +76,15 @@ $ monk run jenkins/server
 
 🔩 templates/local/jenkins/server
  └─🧊 Peer set0
-    ├─🔩 templates/local/jenkins/server 
-    │  └─📦 cee658ced4af3594fb80bc3a44f387a1-local-jenkins-server-traefik 
-    │     ├─🧩 docker.io/library/traefik:v2.8             
+    ├─🔩 templates/local/jenkins/server
+    │  └─📦 cee658ced4af3594fb80bc3a44f387a1-local-jenkins-server-traefik
+    │     ├─🧩 docker.io/library/traefik:v2.8
     │     ├─💾 /var/run/podman/podman.sock -> /var/run/docker.sock
-    │     ├─🔌 open 54.221.107.115:443 -> 443  
-    │     └─🔌 open 54.221.107.115:80 -> 80    
-    └─🔩 templates/local/jenkins/server 
-       └─📦 3742bed532158b00f1bc4f0273fffbb2-local-jenkins-server-jenkins 
-          ├─🧩 docker.io/jenkins/jenkins:lts              
+    │     ├─🔌 open 54.221.107.115:443 -> 443
+    │     └─🔌 open 54.221.107.115:80 -> 80
+    └─🔩 templates/local/jenkins/server
+       └─📦 3742bed532158b00f1bc4f0273fffbb2-local-jenkins-server-jenkins
+          ├─🧩 docker.io/jenkins/jenkins:lts
           ├─💾 /var/lib/monkd/volumes/jenkins -> /var/jenkins_home
           └─🔌 open 54.221.107.115:50000 -> 50000
 
@@ -101,22 +102,22 @@ $ monk do jenkins/server/getAdminCredentials
 ✔ Get templates/local/jenkins/server actions list success
 ✔ Got action parameters
 ✔ Parse parameters success
-✔ Running action: 
+✔ Running action:
 ed09f15dd060481fa01cc2e2db388611
 ✨ Took: 2s
 ```
 
 ## Variables
 
-The variables are stored in `manifest.yaml` file.  
+The variables are stored in `manifest.yaml` file.
 You can quickly setup by editing the values there.
 
-| Variable                     | Description                                                                   | Default              |
-|------------------------------|-------------------------------------------------------------------------------|----------------------|
-| hostname                     | Your Jenkins master hostname                                                  | <- ip-address-public |
-| enable-traefik               | If disabled traffic will be routed only to Jenkins via non-ssl encrypted port | true                 |
-| http-port                    | Port that Traefik/Jenkins will listen for non SSL traffic                     | 80                   |
-| https-port                   | Port that Traefik will listen for SSL traffic                                 | 443                  |
+| Variable       | Description                                                                   | Default              |
+| -------------- | ----------------------------------------------------------------------------- | -------------------- |
+| hostname       | Your Jenkins master hostname                                                  | <- ip-address-public |
+| enable-traefik | If disabled traffic will be routed only to Jenkins via non-ssl encrypted port | true                 |
+| http-port      | Port that Traefik/Jenkins will listen for non SSL traffic                     | 80                   |
+| https-port     | Port that Traefik will listen for SSL traffic                                 | 443                  |
 
 ## Stop, remove and clean up workloads and templates
 
@@ -126,5 +127,5 @@ monk purge -x jenkins/server
 ```
 
 ## Persistency
-If you're using any of the clouds available via Monk. You can use volume definition to spin a disk block device to make your Jenkins instance independent from the node it's running on.  
+If you're using any of the clouds available via Monk. You can use volume definition to spin a disk block device to make your Jenkins instance independent from the node it's running on.
 To do simply uncomment the `volume` block in `manifest.yaml`
