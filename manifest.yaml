@@ -13,7 +13,6 @@ server:
 
       Jenkins supports a wide range of programming languages and provides integration with various tools and platforms, making it an extremely versatile and customizable automation server. It also provides a vast collection of plugins that can be used to extend its functionality and integrate with other tools in the software development pipeline. Additionally, Jenkins is easy to set up and configure, with a user-friendly interface that makes it accessible to developers of all skill levels.
     source: https://github.com/jenkinsci/jenkins
-    version: 1.0
 
   variables:
     hostname:
