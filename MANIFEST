@@ -1,3 +1,2 @@
 REPO monk-jenkins
 LOAD manifest.yaml
-RESOURCES files/traefik.yaml
