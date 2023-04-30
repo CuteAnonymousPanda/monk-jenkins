@@ -1,4 +1,4 @@
-namespace: /jenkins
+namespace: jenkins
 
 server:
   defines: runnable
@@ -13,87 +13,26 @@ server:
 
       Jenkins supports a wide range of programming languages and provides integration with various tools and platforms, making it an extremely versatile and customizable automation server. It also provides a vast collection of plugins that can be used to extend its functionality and integrate with other tools in the software development pipeline. Additionally, Jenkins is easy to set up and configure, with a user-friendly interface that makes it accessible to developers of all skill levels.
     source: https://github.com/jenkinsci/jenkins
-
-  variables:
-    hostname:
-      type: string
-      value: <- ip-address-public
-    enable-traefik:
-      type: bool
-      value: true
-    http-port:
-      type: string
-      value: 80
-    https-port:
-      type: string
-      value: 443
-
-  # volumes:
-  #   defines: volumes
-  #   jenkins-master:
-  #     size: 200
-  #     kind: SSD
-  #     path: <- `${monk-volume-path}/jenkins`
-  #     backup:
-  #       rotation-days: 5
-  #       every: 1
-  #       kind: day
-  #       start-time: 03:00
-  #       start-day: MONDAY
-
-  files:
-    config:
-      container: traefik
-      mode: 0644
-      path: /etc/traefik/traefik.yaml
-      contents: <<< files/traefik.yaml
-
   containers:
-    traefik:
-      image: traefik
-      image-tag: v2.8
-      paths:
-        - "/var/run/podman/podman.sock:/var/run/docker.sock:z"
-      ports:
-        - <- $enable-traefik then(`${http-port}:${http-port}`)
-        - <- $enable-traefik then(`${https-port}:${https-port}`)
-
     jenkins:
       paths:
         - <- `${monk-volume-path}/jenkins:/var/jenkins_home`
-      ports:
-        - <- $enable-traefik not then(`${http-port}:8080`)
-        - '50000:50000'
-      image-tag: lts
       image: jenkins/jenkins
+      image-tag: lts
       user: jenkins
-      labels:
-        - <- `traefik.enable=${enable-traefik}`
-
-        - traefik.http.routers.jenkins-web.entrypoints=web
-        - traefik.http.routers.jenkins-web.rule=PathPrefix(`/`)
-        - traefik.http.routers.jenkins-web.middlewares=open-access@file
-
-        - traefik.http.routers.jenkins-websecure.entrypoints=websecure
-        - traefik.http.routers.jenkins-websecure.rule=PathPrefix(`/`)
-        - traefik.http.routers.jenkins-websecure.middlewares=open-access@file,jenkins-headers
-
-        - traefik.http.routers.jenkins-websecure.tls=true
-        - traefik.http.routers.jenkins-websecure.tls.certresolver=letsencrypt
-        - <- `traefik.http.routers.jenkins-websecure.tls.domains[0].main=${hostname}`
-        - traefik.http.routers.jenkins-websecure.service=jenkins-websecure
-
-        - traefik.http.middlewares.jenkins-headers.headers.sslredirect=true
-        - traefik.http.middlewares.jenkins-headers.headers.sslproxyheaders.name0=X-Forwarded-Proto:https
-        - <- `traefik.http.middlewares.jenkins-headers.headers.sslProxyHeaders.name1=X-Forwarded-Host:${hostname}`
-
-        - traefik.http.middlewares.jenkins-headers.headers.customrequestheaders.name0=X-Forwarded-Proto:https
-        - <- `traefik.http.middlewares.jenkins-headers.headers.customrequestheaders.name1=X-Forwarded-Host:${hostname}`
-        - <- `traefik.http.middlewares.jenkins-headers.headers.customrequestheaders.name2=X-Forwarded-Port:${https-port}`
-
-        - traefik.http.services.jenkins-websecure.loadbalancer.server.port=8080
       environment:
         - JAVA_OPTS=-Djava.awt.headless=true
+  services:
+    http:
+      container: jenkins
+      protocol: tcp
+      port: 8080
+      host-port: 8080
+    tcp-agent:
+      container: jenkins
+      protocol: tcp
+      port: 50000
+      host-port: 50000
 
   actions:
     getAdminCredentials:
