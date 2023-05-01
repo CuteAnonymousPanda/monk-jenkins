@@ -12,7 +12,14 @@ server:
       Jenkins is an open-source automation server that helps to automate various parts of the software development process, including building, testing, and deploying applications. It is a powerful continuous integration (CI) and continuous delivery (CD) tool that allows developers to automate repetitive tasks and improve the efficiency of their workflows. With Jenkins, developers can create pipelines that automate the entire software delivery process, from code commit to production deployment.
 
       Jenkins supports a wide range of programming languages and provides integration with various tools and platforms, making it an extremely versatile and customizable automation server. It also provides a vast collection of plugins that can be used to extend its functionality and integrate with other tools in the software development pipeline. Additionally, Jenkins is easy to set up and configure, with a user-friendly interface that makes it accessible to developers of all skill levels.
+      ---
+
+      Notes:
+
+      This template has available Jenkins action:
+      getAdminCredentials - Will display your default Jenkins credentials
     source: https://github.com/jenkinsci/jenkins
+    tags: Jenkins, Continuous Integration, Continuous Deployment, DevOps, Jenkins Pipeline, Jenkinsfile, Jenkins Plugins, Build Automation, Test Automation, Configuration Management, Version Control, Artifact Management, Release Management, Deployment Automation, Infrastructure as Code, Agile Development, Docker, Kubernetes, Monitoring, Collaboration
   containers:
     jenkins:
       paths:
