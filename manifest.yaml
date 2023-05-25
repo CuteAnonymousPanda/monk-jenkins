@@ -19,7 +19,7 @@ server:
       This template has available Jenkins action:
       getAdminCredentials - Will display your default Jenkins credentials
     source: https://github.com/jenkinsci/jenkins
-    tags: Jenkins, Continuous Integration, Continuous Deployment, DevOps, Jenkins Pipeline, Jenkinsfile, Jenkins Plugins, Build Automation, Test Automation, Configuration Management, Version Control, Artifact Management, Release Management, Deployment Automation, Infrastructure as Code, Agile Development, Docker, Kubernetes, Monitoring, Collaboration
+    tags: infrastructure as code, release management, jenkins plugins, monitoring, test automation, continuous deployment, jenkinsfile, docker, continuous integration, kubernetes, configuration management, collaboration, build automation, devops, jenkins pipeline, version control, deployment automation, artifact management
   containers:
     jenkins:
       paths:
